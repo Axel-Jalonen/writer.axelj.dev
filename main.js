@@ -149,7 +149,6 @@ const zenModeButton = document.getElementById('zen-mode-button');
 zenModeButton.addEventListener('click', () => {
     savedNotesContainer.style.display = savedNotesContainer.style.display === 'none' ? 'flex' : 'none';
     document.getElementById('editor-top').style.display = document.getElementById('editor-top').style.display === 'none' ? 'block' : 'none';
-    textInput.style.fontSize = textInput.style.fontSize === '1.5rem' ? '1rem' : '1.5rem';
-    textInput.style.borderColor = textInput.style.borderColor === '#ccc' ? '#eee' : '#ccc';
+    textInput.style.borderColor = textInput.style.borderColor === 'rgb(0, 0, 0)' ? '#eee' : '#000';
     document.getElementById('editor').style.width = document.getElementById('editor').style.width === '100%' ? '75%' : '100%';
 });
