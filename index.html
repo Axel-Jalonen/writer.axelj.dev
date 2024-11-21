@@ -10,13 +10,16 @@
 <body>
     <main>
         <div id="editor">
-            <h1>Notes / Essays / Writing</h1>
-            <div id="commands">
-                <button id="save-button">Save</button>
-                <button id="clear-button">Clear</button>
+            <div id="editor-top">
+                <h1>Notes / Essays / Writing</h1>
+                <div id="commands">
+                    <button id="save-button">Save</button>
+                    <button id="clear-button">Clear</button>
+                </div>
+                <input type="text" id="title-input" placeholder="Title">
             </div>
-            <input type="text" id="title-input" placeholder="Title">
-            <textarea id="text-input" class="text-input"></textarea>
+            <button id="zen-mode-button">Zen</button>
+            <textarea id="text-input"></textarea>
         </div>
         <div id="saved-notes">
             <h1>Saved Notes</h1>

@@ -26,6 +26,7 @@ main {
 }
 
 #text-input {
+    outline: none;
     width: 100%;
     height: 100%;
     font-family: helvetica;
@@ -65,4 +66,21 @@ button {
     border-radius: 0.5rem;
     border: 1px solid #ccc;
     width: 100%;
+}
+
+#zen-mode-button {
+    margin-bottom: .5rem;
+    background: transparent;
+    border: 1px solid #eee;
+    border-radius: 2rem;
+    color: #999;
+    font-family: serif;
+    font-style: italic;
+    transition: all 0.3s ease;
+}
+
+#zen-mode-button:hover {
+    background: #f8f8f8;
+    color: #666;
+    transform: scale(1.05);
 }
