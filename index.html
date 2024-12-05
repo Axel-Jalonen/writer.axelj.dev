@@ -1,31 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://axelj.dev/favicon.svg" type="image/svg+xml">
-    <title>Local Write</title>
-    <link rel="stylesheet" href="./main.css">
-</head>
-<body>
-    <main>
-        <div id="editor">
-            <div id="editor-top">
-                <h1>Notes / Essays / Writing</h1>
-                <div id="commands">
-                    <button id="save-button">Save</button>
-                    <button id="clear-button">Clear</button>
-                </div>
-                <input type="text" id="title-input" placeholder="Title">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="icon"
+            href="https://axelj.dev/favicon.svg"
+            type="image/svg+xml"
+        />
+        <title>Local Write</title>
+        <link rel="stylesheet" href="./main.css" />
+    </head>
+    <body>
+        <main>
+            <div id="saved-notes">
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search notes..."
+                />
             </div>
-            <button id="zen-mode-button">Zen</button>
-            <textarea style="border-color: #000;" id="text-input"></textarea>
-        </div>
-        <div id="saved-notes">
-            <h1>Saved Notes</h1>
-            <input type="text" id="search-input" placeholder="Search notes..."/>
-        </div>
-    </main>
-</body>
-<script src="./main.js"></script>
+            <div id="editor">
+                <div id="editor-top">
+                    <div id="commands">
+                        <button id="save-button">Save</button>
+                    </div>
+                </div>
+                <div id="editor-input-container">
+                    <input type="text" id="title-input" placeholder="Title" />
+                    <textarea
+                        id="text-input"
+                        placeholder="Start writing..."
+                    ></textarea>
+                </div>
+            </div>
+        </main>
+    </body>
+    <script src="./main.js"></script>
 </html>

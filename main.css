@@ -1,88 +1,101 @@
 :root {
-    font-family: helvetica;
+    font-family: helvetica, sans-serif;
+}
+
+button {
+    border-radius: 0.25rem;
+    border: none;
+    background: white;
+    border: 2px solid black;
+    padding: 0.5rem;
+    text-transform: uppercase;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#editor-input-container input,
+textarea {
+    border: none;
+    margin: 0.5rem;
+    outline: none;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+#text-input {
+    min-height: 75vh;
+    resize: none;
+}
+
+#search-input {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    outline: none;
+    border: 2px solid black;
+    background: rgb(248, 248, 248);
+    margin-bottom: 2rem;
+}
+
+#search-input:hover {
+    background: white;
+}
+
+body {
+    align-items: center;
 }
 
 main {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    max-width: 1250px;
-    margin: auto;
-    height: 100vh;
-}
-
-#editor {
-    height: 100%;
-    width: 75%;
-    margin: 2rem;
-    font-size: 1rem;
-}
-
-#title-input {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid #000;
-    outline: none;
-    padding: 1rem;
-    border-radius: 0.50rem;
-}
-
-#text-input {
-    outline: none;
-    width: 100%;
-    height: 100%;
-    font-family: helvetica;
-    padding: 1rem;
-    font-size: 1.5rem;
-    border-radius: 0.50rem;
+    justify-content: center;
 }
 
 #commands {
     display: flex;
-    flex-direction: row;
-    
-    margin-bottom: 1rem;
+    justify-content: end;
+}
+
+#editor-input-container {
+    border: 2px solid black;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    width: 75vw;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+.note-element {
+    padding: 0.25rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    border: 2px solid black;
+    border-radius: 0.25rem;
+}
+
+.note-element * {
+    padding: 0;
+    margin: 0;
+}
+
+.note-element button {
+    padding: 0.25rem;
+    margin-top: 0.5rem;
+    margin-right: 0.25rem;
+}
+
+.note-element h3 {
+    font-weight: normal;
 }
 
 #saved-notes {
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    margin: 2rem 2rem 2rem 1rem;
+    margin-right: 2rem;
+    margin-top: 3rem;
 }
 
-button {
-    padding: 0.75rem 1.25rem;
-    font-size: 1rem;
-    border: none;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    margin-right: .5rem;
-}
-
-#search-input {
-    padding: 0.75rem;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #ccc;
-    width: 100%;
-}
-
-#zen-mode-button {
-    margin-bottom: .5rem;
-    background: transparent;
-    border: 1px solid #eee;
-    border-radius: 2rem;
-    color: #999;
-    font-family: serif;
-    font-style: italic;
-    transition: all 0.3s ease;
-}
-
-#zen-mode-button:hover {
-    background: #f8f8f8;
-    color: #666;
-    transform: scale(1.05);
+#editor {
+    margin-top: 3rem;
 }
