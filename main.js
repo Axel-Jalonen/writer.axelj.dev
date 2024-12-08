@@ -5,6 +5,7 @@ const saveButton = document.getElementById("save-button");
 saveButton.addEventListener("click", () => {
   const title = titleInput.value;
   const text = textInput.value;
+  const timestamp = Date.now();
 
   if (!title || !text) {
     return;
@@ -14,7 +15,7 @@ saveButton.addEventListener("click", () => {
   notes.push({
     title,
     text,
-    timestamp: Date.now(),
+    timestamp,
   });
 
   localStorage.setItem("notes", JSON.stringify(notes));
@@ -45,6 +46,10 @@ function loadSavedNotes() {
     const noteElement = document.createElement("div");
     noteElement.classList.add("note-element");
     const contentDiv = document.createElement("div");
+
+    const noteDate = document.createElement("p");
+    noteDate.classList.add("note-date");
+    noteDate.textContent = new Date(note.timestamp).toLocaleString();
 
     const noteTitle = document.createElement("h3");
     noteTitle.textContent =
@@ -81,6 +86,7 @@ function loadSavedNotes() {
     });
 
     contentDiv.appendChild(noteTitle);
+    contentDiv.appendChild(noteDate);
     noteElement.appendChild(contentDiv);
     buttonsDiv.appendChild(editButton);
     buttonsDiv.appendChild(deleteButton);

@@ -111,3 +111,9 @@ main {
 #no-notes-message {
     color: grey;
 }
+
+.note-date {
+    color: grey;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+}
