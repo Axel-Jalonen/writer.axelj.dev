@@ -21,10 +21,10 @@ textarea {
     margin: 0.5rem;
     outline: none;
     font-family: inherit;
-    font-size: 1rem;
 }
 
 #text-input {
+    font-size: 1rem;
     min-height: 75vh;
     resize: none;
 }
@@ -40,6 +40,10 @@ textarea {
 
 #search-input:hover {
     background: white;
+}
+
+#title-input {
+    font-size: 1.15rem;
 }
 
 body {
@@ -72,7 +76,8 @@ main {
     padding: 0.25rem;
     text-transform: uppercase;
     font-size: 0.8rem;
-    border: 2px solid black;
+    margin-bottom: 2rem;
+    /* border: 2px solid black; */
     border-radius: 0.25rem;
 }
 
@@ -82,9 +87,12 @@ main {
 }
 
 .note-element button {
-    padding: 0.25rem;
+    padding: 0.3rem;
+    border: 0;
+    color: grey;
+    background: #f6f6f6;
     margin-top: 0.5rem;
-    margin-right: 0.25rem;
+    margin-right: 1rem;
 }
 
 .note-element h3 {
@@ -98,4 +106,8 @@ main {
 
 #editor {
     margin-top: 3rem;
+}
+
+#no-notes-message {
+    color: grey;
 }

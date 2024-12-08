@@ -29,8 +29,16 @@ const searchInput = document.getElementById("search-input");
 function loadSavedNotes() {
   const notes = JSON.parse(localStorage.getItem("notes") || "[]");
 
-  while (savedNotesContainer.children.length > 2) {
+  while (savedNotesContainer.children.length > 1) {
     savedNotesContainer.removeChild(savedNotesContainer.lastChild);
+  }
+
+  if (notes.length == 0) {
+    const noNotesMessage = document.createElement("p");
+    noNotesMessage.id = "no-notes-message";
+    noNotesMessage.textContent = "No saved notes...";
+    savedNotesContainer.appendChild(noNotesMessage);
+    return;
   }
 
   notes.forEach((note, index) => {
