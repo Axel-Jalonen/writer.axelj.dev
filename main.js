@@ -43,56 +43,7 @@ function loadSavedNotes() {
   }
 
   notes.forEach((note, index) => {
-    const noteElement = document.createElement("div");
-    noteElement.classList.add("note-element");
-    const contentDiv = document.createElement("div");
-
-    const noteDate = document.createElement("p");
-    noteDate.classList.add("note-date");
-    noteDate.textContent = new Date(note.timestamp).toLocaleString();
-
-    const noteTitle = document.createElement("h3");
-    noteTitle.textContent =
-      note.title.length > 20 ? note.title.substring(0, 20) + "..." : note.title;
-
-    const buttonsDiv = document.createElement("div");
-
-    const editButton = document.createElement("button");
-    editButton.innerText = "Edit";
-    editButton.title = "Edit";
-    editButton.addEventListener("click", () => {
-      titleInput.value = note.title;
-      textInput.value = note.text;
-      notes.splice(index, 1);
-      localStorage.setItem("notes", JSON.stringify(notes));
-
-      // Remove the note from the display
-      savedNotesContainer.removeChild(noteElement);
-
-      loadSavedNotes();
-    });
-
-    const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Delete";
-    deleteButton.title = "Delete";
-    deleteButton.addEventListener("click", () => {
-      notes.splice(index, 1);
-      localStorage.setItem("notes", JSON.stringify(notes));
-
-      // Remove the note from the display
-      savedNotesContainer.removeChild(noteElement);
-
-      loadSavedNotes();
-    });
-
-    contentDiv.appendChild(noteTitle);
-    contentDiv.appendChild(noteDate);
-    noteElement.appendChild(contentDiv);
-    buttonsDiv.appendChild(editButton);
-    buttonsDiv.appendChild(deleteButton);
-    noteElement.appendChild(buttonsDiv);
-
-    savedNotesContainer.appendChild(noteElement);
+    drawNote(note, index, notes, "transparent");
   });
 }
 
@@ -124,53 +75,21 @@ searchInput.addEventListener("input", () => {
     .sort((a, b) => b.score - a.score);
 
   // Clear existing notes display
-  while (savedNotesContainer.children.length > 2) {
+  while (savedNotesContainer.children.length > 1) {
     savedNotesContainer.removeChild(savedNotesContainer.lastChild);
+  }
+
+  if (scoredNotes.length == 0) {
+    const noNotesMessage = document.createElement("p");
+    noNotesMessage.id = "no-notes-message";
+    noNotesMessage.textContent = "No notes found...";
+    savedNotesContainer.appendChild(noNotesMessage);
+    return;
   }
 
   // Display filtered notes
   scoredNotes.forEach((note, index) => {
-    const noteElement = document.createElement("div");
-
-    // Add red border to the best match
-    if (index === 0 && searchTerm.length > 0) {
-      noteElement.style.border = "2px solid red";
-    }
-
-    const noteTitle = document.createElement("h3");
-    noteTitle.textContent =
-      note.title.length > 20 ? note.title.substring(0, 20) + "..." : note.title;
-
-    const noteText = document.createElement("p");
-    noteText.textContent =
-      note.text.length > 75 ? note.text.substring(0, 20) + "..." : note.text;
-
-    const editButton = document.createElement("button");
-    editButton.innerText = "Edit";
-    editButton.title = "Edit";
-    editButton.addEventListener("click", () => {
-      titleInput.value = note.title;
-      textInput.value = note.text;
-      notes.splice(index, 1);
-      localStorage.setItem("notes", JSON.stringify(notes));
-      loadSavedNotes();
-    });
-
-    const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Delete";
-    deleteButton.title = "Delete";
-    deleteButton.addEventListener("click", () => {
-      notes.splice(index, 1);
-      localStorage.setItem("notes", JSON.stringify(notes));
-      loadSavedNotes();
-    });
-
-    noteElement.appendChild(noteTitle);
-    noteElement.appendChild(noteText);
-    noteElement.appendChild(editButton);
-    noteElement.appendChild(deleteButton);
-
-    savedNotesContainer.appendChild(noteElement);
+    drawNote(note, index, notes, "red");
   });
 });
 
@@ -182,4 +101,58 @@ function calculateSearchScore(note, searchTerm) {
   const textScore = note.text.toLowerCase().includes(searchTerm) ? 1 : 0;
 
   return titleScore + textScore;
+}
+
+function drawNote(note, index, notes, borderColor) {
+  const noteElement = document.createElement("div");
+  noteElement.style.border = `2px solid ${borderColor}`;
+  noteElement.classList.add("note-element");
+  const contentDiv = document.createElement("div");
+
+  const noteDate = document.createElement("p");
+  noteDate.classList.add("note-date");
+  noteDate.textContent = new Date(note.timestamp).toLocaleString();
+
+  const noteTitle = document.createElement("h3");
+  noteTitle.textContent =
+    note.title.length > 20 ? note.title.substring(0, 20) + "..." : note.title;
+
+  const buttonsDiv = document.createElement("div");
+
+  const editButton = document.createElement("button");
+  editButton.innerText = "Edit";
+  editButton.title = "Edit";
+  editButton.addEventListener("click", () => {
+    titleInput.value = note.title;
+    textInput.value = note.text;
+    notes.splice(index, 1);
+    localStorage.setItem("notes", JSON.stringify(notes));
+
+    // Remove the note from the display
+    savedNotesContainer.removeChild(noteElement);
+
+    loadSavedNotes();
+  });
+
+  const deleteButton = document.createElement("button");
+  deleteButton.innerText = "Delete";
+  deleteButton.title = "Delete";
+  deleteButton.addEventListener("click", () => {
+    notes.splice(index, 1);
+    localStorage.setItem("notes", JSON.stringify(notes));
+
+    // Remove the note from the display
+    savedNotesContainer.removeChild(noteElement);
+
+    loadSavedNotes();
+  });
+
+  contentDiv.appendChild(noteTitle);
+  contentDiv.appendChild(noteDate);
+  noteElement.appendChild(contentDiv);
+  buttonsDiv.appendChild(editButton);
+  buttonsDiv.appendChild(deleteButton);
+  noteElement.appendChild(buttonsDiv);
+
+  savedNotesContainer.appendChild(noteElement);
 }

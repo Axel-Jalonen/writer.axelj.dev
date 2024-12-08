@@ -101,6 +101,7 @@ main {
 
 #saved-notes {
     margin-right: 2rem;
+    min-width: 274px;
     margin-top: 3rem;
 }
 
