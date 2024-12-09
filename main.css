@@ -1,5 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+
 :root {
-    font-family: helvetica, sans-serif;
+    /* font-family: helvetica, sans-serif; */
+    font-family: "Geist", Helvetica, Helvetica, sans-serif;
 }
 
 button {
