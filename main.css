@@ -76,12 +76,16 @@ main {
 }
 
 .note-element {
-    padding: 0.25rem;
+    padding: 0.5rem;
     text-transform: uppercase;
     font-size: 0.8rem;
     margin-bottom: 2rem;
     /* border: 2px solid black; */
     border-radius: 0.25rem;
+    transition: background 0.2s ease-in-out;
+}
+.note-element:hover {
+    background: #eee;
 }
 
 .note-element * {
@@ -120,4 +124,9 @@ main {
     color: grey;
     margin-top: 0.5rem;
     font-size: 0.75rem;
+}
+
+.saved-note-body {
+    margin: 0.25rem 0rem;
+    color: #333;
 }
