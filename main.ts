@@ -68,9 +68,10 @@ function renderNotes() {
       currentContext = note;
       displayContext();
     });
+
     noteElement
       .querySelector(".delete-button")!
-      .addEventListener("click", () => {
+      .addEventListener("click", (event) => {
         notes.splice(notes.indexOf(note), 1);
         localStorage.setItem("notes", JSON.stringify(notes));
         noteElement.remove();
@@ -80,24 +81,31 @@ function renderNotes() {
 }
 
 function saveContext() {
+  dbg("Context saved initiated");
+  currentContext.title = titleInput.value;
+  currentContext.text = textInput.value;
   if (currentContext.title.trim() === "") {
+    dbg("No title");
     return;
   }
-  const note = notes.find((n) => n.uuid === currentContext.uuid);
+  const note = notes.filter((n) => n.uuid === currentContext.uuid);
   // Update the note if it exists
-  if (note !== undefined) {
-    note.title = titleInput.value;
-    note.text = textInput.value;
+  if (note.length === 1) {
+    dbg("Found note");
+    note[0].title = titleInput.value;
+    note[0].text = textInput.value;
+    dbg("Updated note");
   } else {
-    // Update & add the current note, if it isn't already saved
-    dbg(titleInput.value);
+    dbg("No note found, updating context");
+    // Update & add the current note context, if it isn't already saved
     currentContext.title = titleInput.value;
     currentContext.text = textInput.value;
     notes.push(currentContext);
+    renderNotes();
+    updateStorage();
+    dbg("Updated context & added note, rerendered");
   }
   // Render the notes list with new data
-  renderNotes();
-  updateStorage();
 }
 
 function updateStorage() {
