@@ -41,7 +41,7 @@ let notes: Note[] = [];
 let currentContext: Note;
 
 function initalizer() {
-  currentContext = new Note("", "", Date.now(), crypto.randomUUID());
+  updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
   const rawSavedNotes = localStorage.getItem("notes");
   if (rawSavedNotes !== null) {
     notes = JSON.parse(rawSavedNotes);
@@ -65,26 +65,40 @@ function renderNotes() {
       if (currentContext.title !== "") {
         saveContext();
       }
-      currentContext = note;
-      displayContext();
+      updateContext(note);
     });
 
     noteElement
       .querySelector(".delete-button")!
-      .addEventListener("click", () => {
+      .addEventListener("click", (event) => {
+        // Stop the event from bubbling to the note element
+        // (parent of button), which would set the context
+        // again
+        event.stopPropagation();
+        // Remove element from notes array
         notes.splice(notes.indexOf(note), 1);
-        localStorage.clear();
-        localStorage.setItem("notes", JSON.stringify(notes));
+        // Update storage
+        updateStorage();
+        // Create a new note & set as context
+        updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
+        // Remove self from DOM
         noteElement.remove();
       });
     getElementById("notes").appendChild(noteElement);
   });
 }
 
+function updateContext(note: Note) {
+  currentContext = note;
+  displayContext();
+}
+
 function saveContext() {
   dbg("Context saved initiated");
-  currentContext.title = titleInput.value;
-  currentContext.text = textInput.value;
+  const titleValue = titleInput.value;
+  const textValue = textInput.value;
+  currentContext.title = titleValue;
+  currentContext.text = textValue;
   if (currentContext.title.trim() === "") {
     dbg("No title");
     return;
@@ -93,8 +107,8 @@ function saveContext() {
   // Update the note if it exists
   if (note.length === 1) {
     dbg("Found note");
-    note[0].title = titleInput.value;
-    note[0].text = textInput.value;
+    note[0].title = titleValue;
+    note[0].text = textValue;
     dbg("Updated note");
   } else {
     dbg("No note found, updating context");
@@ -102,11 +116,11 @@ function saveContext() {
     currentContext.title = titleInput.value;
     currentContext.text = textInput.value;
     notes.push(currentContext);
-    renderNotes();
-    updateStorage();
     dbg("Updated context & added note, rerendered");
   }
   // Render the notes list with new data
+  renderNotes();
+  updateStorage();
 }
 
 function updateStorage() {
@@ -123,8 +137,7 @@ saveButton.addEventListener("click", saveContext);
 
 newButton.addEventListener("click", () => {
   saveContext();
-  currentContext = new Note("", "", Date.now(), crypto.randomUUID());
-  displayContext();
+  updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
 });
 
 // Load notes on page load
