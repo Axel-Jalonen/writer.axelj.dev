@@ -71,8 +71,9 @@ function renderNotes() {
 
     noteElement
       .querySelector(".delete-button")!
-      .addEventListener("click", (event) => {
+      .addEventListener("click", () => {
         notes.splice(notes.indexOf(note), 1);
+        localStorage.clear();
         localStorage.setItem("notes", JSON.stringify(notes));
         noteElement.remove();
       });

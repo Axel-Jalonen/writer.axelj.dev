@@ -79,7 +79,7 @@ main {
     padding: 0.5rem;
     text-transform: uppercase;
     font-size: 0.8rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     /* border: 2px solid black; */
     border-radius: 0.25rem;
     transition: background 0.2s ease-in-out;
