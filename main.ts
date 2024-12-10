@@ -12,17 +12,6 @@ const saveButton = getElementById("save-button") as HTMLButtonElement;
 const newButton = getElementById("new-button") as HTMLButtonElement;
 const savedNotes = getElementById("notes");
 
-// When the user opens the page we render saved notes.
-// Each saved note has an event listener for click
-// When we click it, it will fill the editor context
-// with the note content and NOT remove the note from the
-// saved notes list. It will automatically saved the note
-// Every 2 seconds, so we don't have to worry about losing
-// the note content. We can always click the delete button
-// to remove a note, whether or not it's currently in context.
-// So each note will have a UUID, and we can use that to
-// identify the note in the saved notes list and remove it
-
 class Note {
   title: string;
   text: string;
