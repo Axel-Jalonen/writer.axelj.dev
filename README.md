@@ -1,5 +1,5 @@
 # TODO
-- Implement search
+- [ ] Implement search
 - [x] Implement default title
 
 # Writer
