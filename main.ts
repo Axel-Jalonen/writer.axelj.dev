@@ -129,6 +129,26 @@ newButton.addEventListener("click", () => {
   updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
 });
 
+textInput.addEventListener("keydown", (event) => {
+  if (event.key === "Tab") {
+    event.preventDefault();
+    const start = textInput.selectionStart;
+    const end = textInput.selectionEnd;
+    if (start === null || end === null) {
+      return;
+    }
+
+    // Set the new value with the tab inserted
+    textInput.value =
+      textInput.value.substring(0, start) +
+      "    " +
+      textInput.value.substring(end);
+
+    // Move the cursor to the correct position after the tab
+    textInput.selectionStart = textInput.selectionEnd = start + 4;
+  }
+});
+
 // Load notes on page load
 renderNotes();
 
