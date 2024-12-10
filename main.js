@@ -1,64 +1,51 @@
-"use strict";
-function getElementById(id) {
-    const e = document.getElementById(id);
-    if (e === null) {
-        throw new Error(`Element with id ${id} not found`);
-    }
-    return e;
-}
-const titleInput = getElementById("title-input");
-const textInput = getElementById("text-input");
-const saveButton = getElementById("save-button");
-const newButton = getElementById("new-button");
-const notesInfo = getElementById("edge-notification");
-const savedNotes = getElementById("notes");
+import * as domElements from "./domElements";
 class Note {
     title;
-    text;
+    body;
     timestamp;
     uuid;
     constructor(title, text, timestamp, uuid) {
         this.title = title;
-        this.text = text;
+        this.body = text;
         this.timestamp = timestamp;
         this.uuid = uuid;
     }
 }
-let notes = [];
-let currentContext;
+let noteMemoryState = [];
+let editorContext;
 function initalizer() {
-    updateContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
-    const rawSavedNotes = localStorage.getItem("notes");
-    if (rawSavedNotes !== null) {
-        notes = JSON.parse(rawSavedNotes);
+    renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
+    const storageNotes = localStorage.getItem("notes");
+    if (storageNotes !== null) {
+        noteMemoryState = JSON.parse(storageNotes);
     }
 }
 initalizer();
-function renderNotes() {
-    savedNotes.innerHTML = "";
-    if (notes.length === 0) {
+function renderSavedNotes() {
+    domElements.savedNotes.innerHTML = "";
+    if (noteMemoryState.length === 0) {
         showStatus("No saved notes", "block");
         return;
     }
     showStatus("", "none");
-    notesInfo.style.display = "none";
-    notes.forEach((note) => {
-        const noteElement = document.createElement("div");
-        noteElement.classList.add("note-element");
+    domElements.notesInfo.style.display = "none";
+    noteMemoryState.forEach((note) => {
+        const noteNode = document.createElement("div");
+        noteNode.classList.add("note-element");
         const dateString = new Date(note.timestamp).toLocaleDateString();
-        noteElement.innerHTML = `
+        noteNode.innerHTML = `
       <h3>${note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title}</h3>
-      <p class="saved-note-body">${note.text.length > 25 ? note.text.slice(0, 25) + "..." : note.text}</p>
+      <p class="saved-note-body">${note.body.length > 25 ? note.body.slice(0, 25) + "..." : note.body}</p>
       <p>${dateString}</p>
       <button class="delete-button">Delete</button>
     `;
-        noteElement.addEventListener("click", () => {
-            if (currentContext.title !== "") {
-                saveContext();
+        noteNode.addEventListener("click", () => {
+            if (editorContext.title !== "") {
+                saveEditorContext();
             }
-            updateContext(note);
+            renderContext(note);
         });
-        noteElement
+        noteNode
             .querySelector(".delete-button")
             .addEventListener("click", (event) => {
             // Stop the event from bubbling to the note element
@@ -66,90 +53,89 @@ function renderNotes() {
             // again
             event.stopPropagation();
             // Remove element from notes array
-            notes.splice(notes.indexOf(note), 1);
+            noteMemoryState.splice(noteMemoryState.indexOf(note), 1);
             // Update storage
-            updateStorage();
+            resetStorageWithNotes();
             // Create a new note & set as context
-            updateContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
+            renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
             // Remove self from DOM
-            noteElement.remove();
-            if (notes.length === 0) {
+            noteNode.remove();
+            if (noteMemoryState.length === 0) {
                 showStatus("No saved notes", "block");
             }
         });
-        getElementById("notes").appendChild(noteElement);
+        domElements.getElementById("notes").appendChild(noteNode);
     });
 }
 function showStatus(text, display) {
-    notesInfo.style.display = display;
-    notesInfo.innerText = text;
+    domElements.notesInfo.style.display = display;
+    domElements.notesInfo.innerText = text;
 }
-function updateContext(note) {
-    currentContext = note;
-    displayContext();
+function renderContext(note) {
+    editorContext = note;
+    domElements.titleInput.value = editorContext.title;
+    domElements.bodyInput.value = editorContext.body;
 }
-function saveContext() {
+function saveEditorContext() {
     dbg("Context saved initiated");
-    const titleValue = titleInput.value;
-    const textValue = textInput.value;
-    currentContext.title = titleValue;
-    currentContext.text = textValue;
-    if (textValue.trim() === "") {
+    const titleContent = domElements.titleInput.value;
+    const bodyContent = domElements.bodyInput.value;
+    editorContext.title = titleContent;
+    editorContext.body = bodyContent;
+    if (bodyContent.trim() === "") {
         dbg("No title");
         return;
     }
-    const note = notes.filter((n) => n.uuid === currentContext.uuid);
+    const foundNotes = noteMemoryState.filter((n) => n.uuid === editorContext.uuid);
     // Update the note if it exists
-    if (note.length === 1) {
+    if (foundNotes.length === 1) {
         dbg("Found note");
-        note[0].title = titleValue;
-        note[0].text = textValue;
+        const uniqueNote = foundNotes[0];
+        uniqueNote.title = titleContent;
+        uniqueNote.body = bodyContent;
         dbg("Updated note");
     }
     else {
         dbg("No note found, updating context");
         // Update & add the current note context, if it isn't already saved
-        currentContext.title = titleInput.value;
-        currentContext.text = textInput.value;
-        notes.push(currentContext);
+        editorContext.title = domElements.titleInput.value;
+        editorContext.body = domElements.bodyInput.value;
+        noteMemoryState.push(editorContext);
         dbg("Updated context & added note, rerendered");
     }
     // Render the notes list with new data
-    renderNotes();
-    updateStorage();
+    renderSavedNotes();
+    resetStorageWithNotes();
 }
-function updateStorage() {
+function resetStorageWithNotes() {
     localStorage.clear();
-    localStorage.setItem("notes", JSON.stringify(notes));
+    localStorage.setItem("notes", JSON.stringify(noteMemoryState));
 }
-function displayContext() {
-    titleInput.value = currentContext.title;
-    textInput.value = currentContext.text;
-}
-saveButton.addEventListener("click", saveContext);
-newButton.addEventListener("click", () => {
-    saveContext();
-    updateContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
+domElements.saveButton.addEventListener("click", saveEditorContext);
+domElements.newButton.addEventListener("click", () => {
+    saveEditorContext();
+    renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
 });
-textInput.addEventListener("keydown", (event) => {
+domElements.bodyInput.addEventListener("keydown", (event) => {
     if (event.key === "Tab") {
         event.preventDefault();
-        const start = textInput.selectionStart;
-        const end = textInput.selectionEnd;
+        const start = domElements.bodyInput.selectionStart;
+        const end = domElements.bodyInput.selectionEnd;
         if (start === null || end === null) {
             return;
         }
         // Set the new value with the tab inserted
-        textInput.value =
-            textInput.value.substring(0, start) +
+        domElements.bodyInput.value =
+            domElements.bodyInput.value.substring(0, start) +
                 "\t" +
-                textInput.value.substring(end);
+                domElements.bodyInput.value.substring(end);
         // Move the cursor to the correct position after the tab
-        textInput.selectionStart = textInput.selectionEnd = start + 1;
+        domElements.bodyInput.selectionStart = domElements.bodyInput.selectionEnd =
+            start + 1;
     }
 });
 // Load notes on page load
-renderNotes();
+renderSavedNotes();
 function dbg(text) {
     console.log(text);
 }
