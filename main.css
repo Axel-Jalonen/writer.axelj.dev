@@ -138,3 +138,33 @@ main {
     margin-bottom: 1rem;
     margin-top: 1.7rem;
 }
+
+#screen-size-warning {
+    display: none;
+}
+
+@media (max-width: 1280px) {
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    body > *:not(:first-child) {
+        display: none;
+    }
+    #screen-size-warning {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        background: white;
+        z-index: 99999;
+    }
+    #screen-size-warning p {
+        text-align: center;
+        padding: 3rem;
+    }
+}
