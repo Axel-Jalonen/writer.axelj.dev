@@ -49,10 +49,8 @@ function renderNotes() {
         noteElement.innerHTML = `
       <h3>${note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title}</h3>
       <p class="saved-note-body">${note.text.length > 25 ? note.text.slice(0, 25) + "..." : note.text}</p>
-      <div class="date-button-container">
-        <p>${dateString}</p>
-        <button class="delete-button">Delete</button>
-      </div>
+      <p>${dateString}</p>
+      <button class="delete-button">Delete</button>
     `;
         noteElement.addEventListener("click", () => {
             if (currentContext.title !== "") {

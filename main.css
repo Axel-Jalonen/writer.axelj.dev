@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+
 :root {
-    /* font-family: helvetica, sans-serif; */
     font-family: "Geist", Helvetica, Helvetica, sans-serif;
 }
 
@@ -8,9 +8,10 @@ button {
     border-radius: 0.25rem;
     border: none;
     background: white;
-    border: 2px solid black;
     padding: 0.5rem;
     text-transform: uppercase;
+    border: none;
+    background: #eee;
 }
 
 button:hover {
@@ -35,9 +36,9 @@ textarea {
     padding: 0.5rem;
     border-radius: 0.25rem;
     outline: none;
-    border: 2px solid black;
+    border: 2px solid #eee;
     background: rgb(248, 248, 248);
-    margin-bottom: 2rem;
+    font-size: 1rem;
 }
 
 #search-input:hover {
@@ -64,7 +65,7 @@ main {
 }
 
 #editor-input-container {
-    border: 2px solid black;
+    border: 2px solid #eee;
     border-radius: 0.5rem;
     margin-top: 1rem;
     padding: 0.5rem;
@@ -132,9 +133,8 @@ main {
     color: #333;
 }
 
-.date-button-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+#new-button {
+    width: 50%;
+    margin-bottom: 1rem;
+    margin-top: 1.7rem;
 }
