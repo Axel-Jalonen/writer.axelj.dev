@@ -134,7 +134,6 @@ textInput.addEventListener("keydown", (event) => {
         textInput.selectionStart = textInput.selectionEnd = start + 1;
     }
 });
-;
 // Load notes on page load
 renderNotes();
 function dbg(text) {
