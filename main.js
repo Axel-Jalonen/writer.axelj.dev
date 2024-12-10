@@ -1,29 +1,33 @@
+"use strict";
 function getElementById(id) {
-    var e = document.getElementById(id);
+    const e = document.getElementById(id);
     if (e === null) {
-        throw new Error("Element with id ".concat(id, " not found"));
+        throw new Error(`Element with id ${id} not found`);
     }
     return e;
 }
-var titleInput = getElementById("title-input");
-var textInput = getElementById("text-input");
-var saveButton = getElementById("save-button");
-var newButton = getElementById("new-button");
-var savedNotes = getElementById("notes");
-var Note = /** @class */ (function () {
-    function Note(title, text, timestamp, uuid) {
+const titleInput = getElementById("title-input");
+const textInput = getElementById("text-input");
+const saveButton = getElementById("save-button");
+const newButton = getElementById("new-button");
+const savedNotes = getElementById("notes");
+class Note {
+    title;
+    text;
+    timestamp;
+    uuid;
+    constructor(title, text, timestamp, uuid) {
         this.title = title;
         this.text = text;
         this.timestamp = timestamp;
         this.uuid = uuid;
     }
-    return Note;
-}());
-var notes = [];
-var currentContext;
+}
+let notes = [];
+let currentContext;
 function initalizer() {
     updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
-    var rawSavedNotes = localStorage.getItem("notes");
+    const rawSavedNotes = localStorage.getItem("notes");
     if (rawSavedNotes !== null) {
         notes = JSON.parse(rawSavedNotes);
     }
@@ -31,12 +35,17 @@ function initalizer() {
 initalizer();
 function renderNotes() {
     savedNotes.innerHTML = "";
-    notes.forEach(function (note) {
-        var noteElement = document.createElement("div");
+    notes.forEach((note) => {
+        const noteElement = document.createElement("div");
         noteElement.classList.add("note-element");
-        var dateString = new Date(note.timestamp).toLocaleDateString();
-        noteElement.innerHTML = "\n      <h3>".concat(note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title, "</h3>\n      <p class=\"saved-note-body\">").concat(note.text.length > 25 ? note.text.slice(0, 25) + "..." : note.text, "</p>\n      <p>").concat(dateString, "</p>\n      <button class=\"delete-button\">Delete</button>\n    ");
-        noteElement.addEventListener("click", function () {
+        const dateString = new Date(note.timestamp).toLocaleDateString();
+        noteElement.innerHTML = `
+      <h3>${note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title}</h3>
+      <p class="saved-note-body">${note.text.length > 25 ? note.text.slice(0, 25) + "..." : note.text}</p>
+      <p>${dateString}</p>
+      <button class="delete-button">Delete</button>
+    `;
+        noteElement.addEventListener("click", () => {
             if (currentContext.title !== "") {
                 saveContext();
             }
@@ -44,7 +53,7 @@ function renderNotes() {
         });
         noteElement
             .querySelector(".delete-button")
-            .addEventListener("click", function (event) {
+            .addEventListener("click", (event) => {
             // Stop the event from bubbling to the note element
             // (parent of button), which would set the context
             // again
@@ -67,15 +76,15 @@ function updateContext(note) {
 }
 function saveContext() {
     dbg("Context saved initiated");
-    var titleValue = titleInput.value;
-    var textValue = textInput.value;
+    const titleValue = titleInput.value;
+    const textValue = textInput.value;
     currentContext.title = titleValue;
     currentContext.text = textValue;
     if (currentContext.title.trim() === "") {
         dbg("No title");
         return;
     }
-    var note = notes.filter(function (n) { return n.uuid === currentContext.uuid; });
+    const note = notes.filter((n) => n.uuid === currentContext.uuid);
     // Update the note if it exists
     if (note.length === 1) {
         dbg("Found note");
@@ -104,27 +113,28 @@ function displayContext() {
     textInput.value = currentContext.text;
 }
 saveButton.addEventListener("click", saveContext);
-newButton.addEventListener("click", function () {
+newButton.addEventListener("click", () => {
     saveContext();
     updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
 });
-textInput.addEventListener("keydown", function (event) {
+textInput.addEventListener("keydown", (event) => {
     if (event.key === "Tab") {
         event.preventDefault();
-        var start = textInput.selectionStart;
-        var end = textInput.selectionEnd;
+        const start = textInput.selectionStart;
+        const end = textInput.selectionEnd;
         if (start === null || end === null) {
             return;
         }
         // Set the new value with the tab inserted
         textInput.value =
             textInput.value.substring(0, start) +
-                "    " +
+                "\t" +
                 textInput.value.substring(end);
         // Move the cursor to the correct position after the tab
-        textInput.selectionStart = textInput.selectionEnd = start + 4;
+        textInput.selectionStart = textInput.selectionEnd = start + 1;
     }
 });
+;
 // Load notes on page load
 renderNotes();
 function dbg(text) {
