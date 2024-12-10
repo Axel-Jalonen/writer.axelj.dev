@@ -24,6 +24,7 @@ textarea {
     margin: 0.5rem;
     outline: none;
     font-family: inherit;
+    line-height: 1.4rem;
 }
 
 #text-input {
