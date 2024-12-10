@@ -45,7 +45,6 @@ function initalizer() {
       }
     });
     noteMemoryState = parsedNotes;
-    noteMemoryState = JSON.parse(storageNotes);
   }
 }
 initalizer();
