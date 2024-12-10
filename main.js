@@ -27,7 +27,7 @@ class Note {
 let notes = [];
 let currentContext;
 function initalizer() {
-    updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
+    updateContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
     const rawSavedNotes = localStorage.getItem("notes");
     if (rawSavedNotes !== null) {
         notes = JSON.parse(rawSavedNotes);
@@ -49,8 +49,10 @@ function renderNotes() {
         noteElement.innerHTML = `
       <h3>${note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title}</h3>
       <p class="saved-note-body">${note.text.length > 25 ? note.text.slice(0, 25) + "..." : note.text}</p>
-      <p>${dateString}</p>
-      <button class="delete-button">Delete</button>
+      <div class="date-button-container">
+        <p>${dateString}</p>
+        <button class="delete-button">Delete</button>
+      </div>
     `;
         noteElement.addEventListener("click", () => {
             if (currentContext.title !== "") {
@@ -70,7 +72,7 @@ function renderNotes() {
             // Update storage
             updateStorage();
             // Create a new note & set as context
-            updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
+            updateContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
             // Remove self from DOM
             noteElement.remove();
             if (notes.length === 0) {
@@ -94,7 +96,7 @@ function saveContext() {
     const textValue = textInput.value;
     currentContext.title = titleValue;
     currentContext.text = textValue;
-    if (currentContext.title.trim() === "") {
+    if (textValue.trim() === "") {
         dbg("No title");
         return;
     }
@@ -129,7 +131,7 @@ function displayContext() {
 saveButton.addEventListener("click", saveContext);
 newButton.addEventListener("click", () => {
     saveContext();
-    updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
+    updateContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
 });
 textInput.addEventListener("keydown", (event) => {
     if (event.key === "Tab") {

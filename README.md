@@ -1,3 +1,7 @@
+# TODO
+- Implement search
+- Implement default title
+
 # Writer
 Write simple notes, save them to local storage.
 
