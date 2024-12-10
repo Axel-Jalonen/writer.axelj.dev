@@ -1,4 +1,17 @@
-import * as domElements from "./domElements";
+"use strict";
+function getElementById(id) {
+    const e = document.getElementById(id);
+    if (e === null) {
+        throw new Error(`Element with id ${id} not found`);
+    }
+    return e;
+}
+const titleInput = getElementById("title-input");
+const bodyInput = getElementById("text-input");
+const saveButton = getElementById("save-button");
+const newButton = getElementById("new-button");
+const notesInfo = getElementById("edge-notification");
+const savedNotes = getElementById("notes");
 class Note {
     title;
     body;
@@ -22,13 +35,13 @@ function initalizer() {
 }
 initalizer();
 function renderSavedNotes() {
-    domElements.savedNotes.innerHTML = "";
+    savedNotes.innerHTML = "";
     if (noteMemoryState.length === 0) {
         showStatus("No saved notes", "block");
         return;
     }
     showStatus("", "none");
-    domElements.notesInfo.style.display = "none";
+    notesInfo.style.display = "none";
     noteMemoryState.forEach((note) => {
         const noteNode = document.createElement("div");
         noteNode.classList.add("note-element");
@@ -64,22 +77,22 @@ function renderSavedNotes() {
                 showStatus("No saved notes", "block");
             }
         });
-        domElements.getElementById("notes").appendChild(noteNode);
+        getElementById("notes").appendChild(noteNode);
     });
 }
 function showStatus(text, display) {
-    domElements.notesInfo.style.display = display;
-    domElements.notesInfo.innerText = text;
+    notesInfo.style.display = display;
+    notesInfo.innerText = text;
 }
 function renderContext(note) {
     editorContext = note;
-    domElements.titleInput.value = editorContext.title;
-    domElements.bodyInput.value = editorContext.body;
+    titleInput.value = editorContext.title;
+    bodyInput.value = editorContext.body;
 }
 function saveEditorContext() {
     dbg("Context saved initiated");
-    const titleContent = domElements.titleInput.value;
-    const bodyContent = domElements.bodyInput.value;
+    const titleContent = titleInput.value;
+    const bodyContent = bodyInput.value;
     editorContext.title = titleContent;
     editorContext.body = bodyContent;
     if (bodyContent.trim() === "") {
@@ -98,8 +111,8 @@ function saveEditorContext() {
     else {
         dbg("No note found, updating context");
         // Update & add the current note context, if it isn't already saved
-        editorContext.title = domElements.titleInput.value;
-        editorContext.body = domElements.bodyInput.value;
+        editorContext.title = titleInput.value;
+        editorContext.body = bodyInput.value;
         noteMemoryState.push(editorContext);
         dbg("Updated context & added note, rerendered");
     }
@@ -111,27 +124,26 @@ function resetStorageWithNotes() {
     localStorage.clear();
     localStorage.setItem("notes", JSON.stringify(noteMemoryState));
 }
-domElements.saveButton.addEventListener("click", saveEditorContext);
-domElements.newButton.addEventListener("click", () => {
+saveButton.addEventListener("click", saveEditorContext);
+newButton.addEventListener("click", () => {
     saveEditorContext();
     renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
 });
-domElements.bodyInput.addEventListener("keydown", (event) => {
+bodyInput.addEventListener("keydown", (event) => {
     if (event.key === "Tab") {
         event.preventDefault();
-        const start = domElements.bodyInput.selectionStart;
-        const end = domElements.bodyInput.selectionEnd;
+        const start = bodyInput.selectionStart;
+        const end = bodyInput.selectionEnd;
         if (start === null || end === null) {
             return;
         }
         // Set the new value with the tab inserted
-        domElements.bodyInput.value =
-            domElements.bodyInput.value.substring(0, start) +
+        bodyInput.value =
+            bodyInput.value.substring(0, start) +
                 "\t" +
-                domElements.bodyInput.value.substring(end);
+                bodyInput.value.substring(end);
         // Move the cursor to the correct position after the tab
-        domElements.bodyInput.selectionStart = domElements.bodyInput.selectionEnd =
-            start + 1;
+        bodyInput.selectionStart = bodyInput.selectionEnd = start + 1;
     }
 });
 // Load notes on page load
