@@ -36,6 +36,15 @@ function initalizer() {
   renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
   const storageNotes = localStorage.getItem("notes");
   if (storageNotes !== null) {
+    const parsedNotes = JSON.parse(storageNotes);
+    // Handle old notes format
+    parsedNotes.forEach((note: any) => {
+      if (note.text) {
+        note.body = note.text;
+        delete note.text;
+      }
+    });
+    noteMemoryState = parsedNotes;
     noteMemoryState = JSON.parse(storageNotes);
   }
 }
