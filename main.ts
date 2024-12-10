@@ -54,8 +54,8 @@ function renderSavedNotes() {
     noteNode.classList.add("note-element");
     const dateString = new Date(note.timestamp).toLocaleDateString();
     noteNode.innerHTML = `
-      <h3>${note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title}</h3>
-      <p class="saved-note-body">${note.body.length > 25 ? note.body.slice(0, 25) + "..." : note.body}</p>
+      <h3>${note.title ? (note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title) : ""}</h3>
+      <p class="saved-note-body">${note.body ? (note.body.length > 25 ? note.body.slice(0, 25) + "..." : note.body) : ""}</p>
       <p>${dateString}</p>
       <button class="delete-button">Delete</button>
     `;
@@ -108,7 +108,7 @@ function saveEditorContext() {
   const bodyContent = bodyInput.value;
   editorContext.title = titleContent;
   editorContext.body = bodyContent;
-  if (bodyContent.trim() === "") {
+  if (titleContent.trim() === "New Note" && bodyContent.trim() === "") {
     dbg("No title");
     return;
   }
