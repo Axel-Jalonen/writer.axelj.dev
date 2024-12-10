@@ -154,6 +154,13 @@ bodyInput.addEventListener("keydown", (event) => {
         bodyInput.selectionStart = bodyInput.selectionEnd = start + 1;
     }
 });
+// Saving with ctrl/cmd + s
+document.addEventListener("keydown", (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault();
+        saveEditorContext();
+    }
+});
 // Load notes on page load
 renderSavedNotes();
 function dbg(text) {

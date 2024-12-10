@@ -175,6 +175,14 @@ bodyInput.addEventListener("keydown", (event) => {
   }
 });
 
+// Saving with ctrl/cmd + s
+document.addEventListener("keydown", (event) => {
+  if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+    event.preventDefault();
+    saveEditorContext();
+  }
+});
+
 // Load notes on page load
 renderSavedNotes();
 
