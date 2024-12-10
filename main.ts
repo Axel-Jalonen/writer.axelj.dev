@@ -10,7 +10,10 @@ const titleInput = getElementById("title-input") as HTMLInputElement;
 const textInput = getElementById("text-input") as HTMLInputElement;
 const saveButton = getElementById("save-button") as HTMLButtonElement;
 const newButton = getElementById("new-button") as HTMLButtonElement;
+const notesInfo = getElementById("edge-notification");
 const savedNotes = getElementById("notes");
+
+type Display = "block" | "none";
 
 class Note {
   title: string;
@@ -40,6 +43,12 @@ initalizer();
 
 function renderNotes() {
   savedNotes.innerHTML = "";
+  if (notes.length === 0) {
+    showStatus("No saved notes", "block");
+    return;
+  }
+  showStatus("", "none");
+  notesInfo.style.display = "none";
   notes.forEach((note: Note) => {
     const noteElement = document.createElement("div");
     noteElement.classList.add("note-element");
@@ -72,9 +81,17 @@ function renderNotes() {
         updateContext(new Note("", "", Date.now(), crypto.randomUUID()));
         // Remove self from DOM
         noteElement.remove();
+        if (notes.length === 0) {
+          showStatus("No saved notes", "block");
+        }
       });
     getElementById("notes").appendChild(noteElement);
   });
+}
+
+function showStatus(text: string, display: Display) {
+  notesInfo.style.display = display;
+  notesInfo.innerText = text;
 }
 
 function updateContext(note: Note) {

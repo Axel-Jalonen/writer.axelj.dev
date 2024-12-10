@@ -108,6 +108,8 @@ main {
 
 #saved-notes {
     margin-right: 2rem;
+    display: flex;
+    flex-direction: column;
     min-width: 274px;
     margin-top: 3rem;
 }
