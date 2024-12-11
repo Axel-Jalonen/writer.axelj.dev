@@ -8,7 +8,7 @@ function getElementById(id: string): HTMLElement {
 
 const titleInput = getElementById("title-input") as HTMLInputElement;
 const bodyInput = getElementById("text-input") as HTMLInputElement;
-const saveButton = getElementById("save-button") as HTMLButtonElement;
+// const saveButton = getElementById("save-button") as HTMLButtonElement;
 const newButton = getElementById("new-button") as HTMLButtonElement;
 const notesInfo = getElementById("edge-notification");
 const savedNotes = getElementById("notes");
@@ -148,11 +148,21 @@ function resetStorageWithNotes() {
   localStorage.setItem("notes", JSON.stringify(noteMemoryState));
 }
 
-saveButton.addEventListener("click", saveEditorContext);
+// saveButton.addEventListener("click", saveEditorContext);
 
 newButton.addEventListener("click", () => {
   saveEditorContext();
   renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
+});
+
+titleInput.addEventListener("input", () => {
+  saveEditorContext();
+  renderSavedNotes();
+});
+
+bodyInput.addEventListener("input", () => {
+  saveEditorContext();
+  renderSavedNotes();
 });
 
 bodyInput.addEventListener("keydown", (event) => {

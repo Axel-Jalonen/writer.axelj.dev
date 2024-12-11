@@ -8,7 +8,7 @@ function getElementById(id) {
 }
 const titleInput = getElementById("title-input");
 const bodyInput = getElementById("text-input");
-const saveButton = getElementById("save-button");
+// const saveButton = getElementById("save-button") as HTMLButtonElement;
 const newButton = getElementById("new-button");
 const notesInfo = getElementById("edge-notification");
 const savedNotes = getElementById("notes");
@@ -132,10 +132,18 @@ function resetStorageWithNotes() {
     localStorage.clear();
     localStorage.setItem("notes", JSON.stringify(noteMemoryState));
 }
-saveButton.addEventListener("click", saveEditorContext);
+// saveButton.addEventListener("click", saveEditorContext);
 newButton.addEventListener("click", () => {
     saveEditorContext();
     renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
+});
+titleInput.addEventListener("input", () => {
+    saveEditorContext();
+    renderSavedNotes();
+});
+bodyInput.addEventListener("input", () => {
+    saveEditorContext();
+    renderSavedNotes();
 });
 bodyInput.addEventListener("keydown", (event) => {
     if (event.key === "Tab") {
