@@ -1,36 +1,40 @@
+"use strict";
 function getElementById(id) {
-    var e = document.getElementById(id);
+    const e = document.getElementById(id);
     if (e === null) {
-        throw new Error("Element with id ".concat(id, " not found"));
+        throw new Error(`Element with id ${id} not found`);
     }
     return e;
 }
-var titleInput = getElementById("title-input");
-var bodyInput = getElementById("text-input");
+const titleInput = getElementById("title-input");
+const bodyInput = getElementById("text-input");
 // const saveButton = getElementById("save-button") as HTMLButtonElement;
-var newButton = getElementById("new-button");
-var notesInfo = getElementById("edge-notification");
-var savedNotes = getElementById("notes");
-var savedNotesContainer = getElementById("saved-notes");
-var showNotesButton = getElementById("show-notes");
-var Note = /** @class */ (function () {
-    function Note(title, text, timestamp, uuid) {
+const newButton = getElementById("new-button");
+const notesInfo = getElementById("edge-notification");
+const savedNotes = getElementById("notes");
+const savedNotesContainer = getElementById("saved-notes");
+const showNotesButton = getElementById("show-notes");
+class Note {
+    title;
+    body;
+    timestamp;
+    uuid;
+    constructor(title, text, timestamp, uuid) {
         this.title = title;
         this.body = text;
         this.timestamp = timestamp;
         this.uuid = uuid;
     }
-    return Note;
-}());
-var noteMemoryState = [];
-var editorContext;
+}
+let noteMemoryState = [];
+let editorContext;
 function initalizer() {
     renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
-    var storageNotes = localStorage.getItem("notes");
+    const storageNotes = localStorage.getItem("notes");
     if (storageNotes !== null) {
-        var parsedNotes = JSON.parse(storageNotes);
+        const parsedNotes = JSON.parse(storageNotes);
         // Handle old notes format
-        parsedNotes.forEach(function (note) {
+        parsedNotes.forEach((note) => {
             if (note.text) {
                 note.body = note.text;
                 delete note.text;
@@ -48,12 +52,17 @@ function renderSavedNotes() {
     }
     showStatus("", "none");
     notesInfo.style.display = "none";
-    noteMemoryState.forEach(function (note) {
-        var noteNode = document.createElement("div");
+    noteMemoryState.forEach((note) => {
+        const noteNode = document.createElement("div");
         noteNode.classList.add("note-element");
-        var dateString = new Date(note.timestamp).toLocaleDateString();
-        noteNode.innerHTML = "\n      <h3>".concat(note.title ? (note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title) : "", "</h3>\n      <p class=\"saved-note-body\">").concat(note.body ? (note.body.length > 25 ? note.body.slice(0, 25) + "..." : note.body) : "", "</p>\n      <p>").concat(dateString, "</p>\n      <button class=\"delete-button\">Delete</button>\n    ");
-        noteNode.addEventListener("click", function () {
+        const dateString = new Date(note.timestamp).toLocaleDateString();
+        noteNode.innerHTML = `
+      <h3>${note.title ? (note.title.length > 20 ? note.title.slice(0, 20) + "..." : note.title) : ""}</h3>
+      <p class="saved-note-body">${note.body ? (note.body.length > 25 ? note.body.slice(0, 25) + "..." : note.body) : ""}</p>
+      <p>${dateString}</p>
+      <button class="delete-button">Delete</button>
+    `;
+        noteNode.addEventListener("click", () => {
             if (editorContext.title !== "") {
                 saveEditorContext();
             }
@@ -61,7 +70,7 @@ function renderSavedNotes() {
         });
         noteNode
             .querySelector(".delete-button")
-            .addEventListener("click", function (event) {
+            .addEventListener("click", (event) => {
             // Stop the event from bubbling to the note element
             // (parent of button), which would set the context
             // again
@@ -92,19 +101,19 @@ function renderContext(note) {
 }
 function saveEditorContext() {
     dbg("Context saved initiated");
-    var titleContent = titleInput.value;
-    var bodyContent = bodyInput.value;
+    const titleContent = titleInput.value;
+    const bodyContent = bodyInput.value;
     editorContext.title = titleContent;
     editorContext.body = bodyContent;
     if (titleContent.trim() === "New Note" && bodyContent.trim() === "") {
         dbg("No title");
         return;
     }
-    var foundNotes = noteMemoryState.filter(function (n) { return n.uuid === editorContext.uuid; });
+    const foundNotes = noteMemoryState.filter((n) => n.uuid === editorContext.uuid);
     // Update the note if it exists
     if (foundNotes.length === 1) {
         dbg("Found note");
-        var uniqueNote = foundNotes[0];
+        const uniqueNote = foundNotes[0];
         uniqueNote.title = titleContent;
         uniqueNote.body = bodyContent;
         dbg("Updated note");
@@ -126,23 +135,23 @@ function resetStorageWithNotes() {
     localStorage.setItem("notes", JSON.stringify(noteMemoryState));
 }
 // saveButton.addEventListener("click", saveEditorContext);
-newButton.addEventListener("click", function () {
+newButton.addEventListener("click", () => {
     saveEditorContext();
     renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
 });
-titleInput.addEventListener("input", function () {
+titleInput.addEventListener("input", () => {
     saveEditorContext();
     renderSavedNotes();
 });
-bodyInput.addEventListener("input", function () {
+bodyInput.addEventListener("input", () => {
     saveEditorContext();
     renderSavedNotes();
 });
-bodyInput.addEventListener("keydown", function (event) {
+bodyInput.addEventListener("keydown", (event) => {
     if (event.key === "Tab") {
         event.preventDefault();
-        var start = bodyInput.selectionStart;
-        var end = bodyInput.selectionEnd;
+        const start = bodyInput.selectionStart;
+        const end = bodyInput.selectionEnd;
         if (start === null || end === null) {
             return;
         }
@@ -156,20 +165,20 @@ bodyInput.addEventListener("keydown", function (event) {
     }
 });
 // Saving with ctrl/cmd + s
-document.addEventListener("keydown", function (event) {
+document.addEventListener("keydown", (event) => {
     if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
         saveEditorContext();
     }
 });
-savedNotes.addEventListener("click", function () {
-    var display = savedNotesContainer.style.display === "block" ? "none" : "block";
+savedNotes.addEventListener("click", () => {
+    const display = savedNotesContainer.style.display === "block" ? "none" : "block";
     savedNotesContainer.style.display = display;
 });
 // Load notes on page load
 renderSavedNotes();
-showNotesButton.addEventListener("click", function () {
-    var display = savedNotesContainer.style.display === "block" ? "none" : "block";
+showNotesButton.addEventListener("click", () => {
+    const display = savedNotesContainer.style.display === "block" ? "none" : "block";
     savedNotesContainer.style.display = display;
 });
 function dbg(text) {
