@@ -166,7 +166,9 @@ main {
     }
 
     #mobile-button-shower {
-        background: red;
+        /* background: red; */
+        display: flex;
+        justify-content: end;
     }
 
     #show-notes {
@@ -179,8 +181,8 @@ main {
     #saved-notes {
         display: none;
         position: absolute;
-        left: 1rem;
-        top: 1vh;
+        right: -1.5rem;
+        top: 0rem;
         background: white;
         /* border: 3px solid black; */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
