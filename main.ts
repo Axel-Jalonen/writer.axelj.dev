@@ -12,6 +12,8 @@ const bodyInput = getElementById("text-input") as HTMLInputElement;
 const newButton = getElementById("new-button") as HTMLButtonElement;
 const notesInfo = getElementById("edge-notification");
 const savedNotes = getElementById("notes");
+const savedNotesContainer = getElementById("saved-notes");
+const showNotesButton = getElementById("show-notes") as HTMLButtonElement;
 
 type Display = "block" | "none";
 
@@ -193,8 +195,20 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+savedNotes.addEventListener("click", () => {
+  const display =
+    savedNotesContainer.style.display === "block" ? "none" : "block";
+  savedNotesContainer.style.display = display;
+});
+
 // Load notes on page load
 renderSavedNotes();
+
+showNotesButton.addEventListener("click", () => {
+  const display =
+    savedNotesContainer.style.display === "block" ? "none" : "block";
+  savedNotesContainer.style.display = display;
+});
 
 function dbg(text: String) {
   console.log(text);

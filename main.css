@@ -144,28 +144,48 @@ main {
     display: none;
 }
 
+#mobile-button-shower {
+    display: none;
+}
+
 @media (max-width: 1280px) {
-    * {
-        padding: 0;
-        margin: 0;
+    #mobile-button-shower {
+        display: block;
     }
-    body > *:not(:first-child) {
-        display: none;
+    #editor {
+        margin-top: 1rem;
     }
-    #screen-size-warning {
+    #editor-input-container {
+        width: auto;
+        margin-top: 0;
+    }
+
+    main {
         display: flex;
-        margin: 0;
-        padding: 0;
-        justify-content: center;
-        align-items: center;
-        width: 100vw;
-        height: 100vh;
-        position: absolute;
-        background: white;
-        z-index: 99999;
+        flex-direction: column;
     }
-    #screen-size-warning p {
-        text-align: center;
-        padding: 3rem;
+
+    #mobile-button-shower {
+        background: red;
+    }
+
+    #show-notes {
+        width: 2rem;
+    }
+
+    #show-notes-svg {
+        width: 100%;
+    }
+    #saved-notes {
+        display: none;
+        position: absolute;
+        left: 1rem;
+        top: 1vh;
+        background: white;
+        /* border: 3px solid black; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 0.25rem;
+        border: 2px solid #eee;
+        padding: 1rem;
     }
 }
