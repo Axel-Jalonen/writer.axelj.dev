@@ -1,5 +1,9 @@
 # TODO
 - [ ] Implement search
+- [ ] Optimize saved notes rendering
+  - [ ] Properly use DOM
+- [ ] Use IndexDB for storage
+- [ ] Use a rope for text editing
 - [x] Implement default title
 
 # Writer
