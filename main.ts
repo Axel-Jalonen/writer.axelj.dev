@@ -155,6 +155,11 @@ function resetStorageWithNotes() {
 newButton.addEventListener("click", () => {
   saveEditorContext();
   renderContext(new Note("New Note", "", Date.now(), crypto.randomUUID()));
+  if (window.innerWidth < 1440) {
+    const display =
+      savedNotesContainer.style.display === "block" ? "none" : "block";
+    savedNotesContainer.style.display = display;
+  }
 });
 
 titleInput.addEventListener("input", () => {
@@ -196,9 +201,11 @@ document.addEventListener("keydown", (event) => {
 });
 
 savedNotes.addEventListener("click", () => {
-  const display =
-    savedNotesContainer.style.display === "block" ? "none" : "block";
-  savedNotesContainer.style.display = display;
+  if (window.innerWidth < 1440) {
+    const display =
+      savedNotesContainer.style.display === "block" ? "none" : "block";
+    savedNotesContainer.style.display = display;
+  }
 });
 
 // Load notes on page load
