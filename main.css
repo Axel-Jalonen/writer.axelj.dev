@@ -153,11 +153,17 @@ main {
         display: block;
     }
     #editor {
-        margin-top: 1rem;
+        margin-top: 0.5rem;
     }
     #editor-input-container {
         width: auto;
         margin-top: 0;
+    }
+
+    #show-notes {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     main {
